@@ -9,6 +9,7 @@ import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -36,10 +37,10 @@ public class UserController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-	//@Value("${okta.apis.baseUri}")
+	@Value("${okta.apis.baseUri}")
 	private String oktaApiBaseUri;
 
-	//@Value("${okta.apis.userEndPoint}")
+	@Value("${okta.apis.userEndPoint}")
 	private String oktaUserEndPoint;
 
 	private RestTemplate restTemplate;
@@ -65,7 +66,7 @@ public class UserController {
 		headers.set("Content-Type", "application/json");
 		headers.set("Accept", "application/json");
 		//TODO : Get it from Spring Security Context
-		headers.set("Authorization", "SSWS 00UyT7qbp1Ak6Z2-UMjqxBO7owSIN5m2roynJJN3yD");
+		headers.set("Authorization", "SSWS 00iDqyaTtMeBfoCyiCwufS0AsbGl9ObZA8-hwILJUf");
 
 		HttpEntity requestEntity = new HttpEntity<>(null, headers);
 		ResponseEntity<UserProfile[]> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, UserProfile[].class);
@@ -87,7 +88,7 @@ public class UserController {
 		headers.set("Content-Type", "application/json");
 		headers.set("Accept", "application/json");
 		//TODO : Get it from Spring Security Context
-		headers.set("Authorization", "SSWS 00UyT7qbp1Ak6Z2-UMjqxBO7owSIN5m2roynJJN3yD");
+		headers.set("Authorization", "SSWS 00iDqyaTtMeBfoCyiCwufS0AsbGl9ObZA8-hwILJUf");
 
 		HttpEntity requestEntity = new HttpEntity<>(null, headers);
 		ResponseEntity<UserProfile> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, UserProfile.class);
@@ -108,7 +109,7 @@ public class UserController {
 		headers.set("Content-Type", "application/json");
 		headers.set("Accept", "application/json");
 		//TODO : Get it from Spring Security Context
-		headers.set("Authorization", "SSWS 00UyT7qbp1Ak6Z2-UMjqxBO7owSIN5m2roynJJN3yD");
+		headers.set("Authorization", "SSWS 00iDqyaTtMeBfoCyiCwufS0AsbGl9ObZA8-hwILJUf");
 
 		HttpEntity requestEntity = new HttpEntity<>(null, headers);
 		ResponseEntity<UserProfile> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, UserProfile.class);

@@ -12,5 +12,5 @@ okta:
     redirect-uri: /authorization-code/callback
     #rolesClaim: groups
   apis:
-    baseUri: https://localhost:8080
+    baseUri: https://dev-46559623.okta.com
     userEndPoint: /api/v1/users

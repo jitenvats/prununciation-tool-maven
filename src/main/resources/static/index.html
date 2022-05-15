@@ -21,12 +21,12 @@
 //it will fetch employee id and populate src of audio control
 
   	    $.ajax({
-  	        url: "http://localhost:8080/api//users/me"
+  	        url: "http://localhost:8080/api/users/me"
   	    }).then(function(data) {
   	    	$("#audioDId").attr('src', "api/pronunce/"+data.id);//assuming id is employeeId
   	    	$("#empId").attr('value', data.id);
-  	    	$("#empName").attr('value', data.profile.firstName+" "+data.profile.lastName);
-  	    	$("#empEmail").attr('value', data.profile.email);
+  	    	$("#empName").html(data.profile.firstName+" "+data.profile.lastName);
+  	    	$("#empEmail").html(data.profile.email);
   	    });
   		
 //it will be used to save recorded file
@@ -133,8 +133,8 @@
 <div class="secondDiv">
 <div style="float:left"><img src="img/profile-avatar.png"></div>
 <div style="pading: 2px 2px 2px 2px;">
-<label>Name:</label><div id="empName"></div>
-<label>Email:</label><div id="empEmail"></div>
+<label>Name:</label><label id="empName"></label><br/>
+<label>Email:</label><label id="empEmail"></label>
 </div>
 <div style="margin-top:10px;">
 <audio controls>
