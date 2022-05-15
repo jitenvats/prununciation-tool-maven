@@ -1,0 +1,16 @@
+---
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://jitenvats:jitenvats@cluster0.ps0yl.mongodb.net/employee-db?retryWrites=true&w=majority
+
+okta:
+  oauth2:
+    client-id: 0oa517afvzNacO6tY5d7  
+    client-secret: G47lm1_OyuB5gg2CmMix8HZIVvpmXsUjyTV4UqV0
+    issuer:   https://dev-46559623.okta.com/oauth2/default
+    redirect-uri: /authorization-code/callback
+    #rolesClaim: groups
+  apis:
+    baseUri: https://localhost:8080
+    userEndPoint: /api/v1/users
