@@ -37,7 +37,6 @@ var globalFileName;
    	        	$("#recordSection").hide();
    	  	        $("#recordButton").hide();
    	        }else{
-   	        	$("#recordSection").show();
    	  	        $("#recordButton").show();
    	        }  	        
   	      
@@ -153,6 +152,12 @@ var globalFileName;
       	          type: "POST",
       	          url: 'http://localhost:8080/api/translate/',
       	          data: JSON.stringify( { employeeId: $("#empId").attr('value'), employeeName: $("#empName").html(), language: $("#language").val(), optOut: optOutV }),
+	      	      beforeSend: function() {
+	      	          $("#loaderDiv").show();
+	      	      },
+	      	      success: function(data) {
+	      	          $("#loaderDiv").hide();
+	      	      },
       	          dataType: 'json',
       	          contentType: "application/json; charset=utf-8",
       	          timeout: 600000,
@@ -173,6 +178,7 @@ var globalFileName;
    });
 </script>
 	<style>
+	
 	html { overflow: hidden; }
 	body { 
 		font: 14pt Arial, sans-serif; 
@@ -246,13 +252,28 @@ var globalFileName;
   width: 100%;
 }
 
-
+.loader{
+    position: absolute;
+    top:0px;
+    right:0px;
+    width:100%;
+    height:100%;
+    background-color:#eceaea;
+    background-image:url('img/ajax-loader.gif');
+    background-size: 50px;
+    background-repeat:no-repeat;
+    background-position:center;
+    z-index:10000000;
+    opacity: 0.7;
+    filter: alpha(opacity=40);
+}
 	</style>
 </head>
 <body>
 <input type="hidden" id="empId" value="111" />
 <div class="mainDiv">Name Pronunciation Page <input type="text" id="searchEmp" /></div>
 <div align="right" style="margin-right: 10px;"><a href="/logout">Logout</a></div>
+<div id="loaderDiv" class="loader" style="display:none;"></div>
 <div class="secondDiv">
 <table border="1" cellpadding="1" cellspacing="1"  class="center">
 	<tbody>
