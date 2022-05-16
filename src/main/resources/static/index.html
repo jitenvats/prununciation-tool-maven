@@ -16,42 +16,24 @@ var globalFileName;
 <script>
 
    $(document).ready(function() {
-
+	   
+      //$("div").click(function() {alert("Welcome to Tutorialspoint!");});
   		$("#recordButton").click(function() {
   			//alert("click");
   	        $("#recordSection").toggle();
   	    });
-  		$("#record").click(function() {
-  			//alert("click");
-  	        $("#recordDiv").toggle();
-	  	      
-  	    });
-  		$("#standardRecording").click(function() {
-  			//alert("click");
-  	        $("#languageDiv").toggle();
-  	    });
-  		$("#optOut").click(function() {
-  			//alert("click");
-  	        $("#recordSection").hide();
-  	        $("#recordButton").toggle();
-  	      
-  	    });
-  		
-  		
-  		
   		
 //it will fetch employee id and populate src of audio control
 
   	    $.ajax({
   	        url: "http://localhost:8080/api/users/me"
   	    }).then(function(data) {
-  	    	$("#audioDId").attr('src', "http://localhost:8080/api/pronunce/"+data.id);//assuming id is employeeId
+  	    	var source = $("#audioDId");
+  	    	$("#audioDId").attr('src', "/api/pronunce/"+data.id).appendTo(source.parent()); //assuming id is employeeId
   	    	$("#empId").attr('value', data.id);
   	    	$("#empName").html(data.profile.firstName+" "+data.profile.lastName);
   	    	$("#empEmail").html(data.profile.email);
   	    });
-  	    
-
   		
 //it will be used to save recorded file
 
@@ -184,15 +166,13 @@ var globalFileName;
 		<tr>
 			<td colspan="1" rowspan="2"><img src="img/profile-avatar.png" style="height: 73px"></td>
 			<td><label id="empName"></label></td>
-			<td rowspan="3">
-			<img id="recordButton" src="img/recording_button.png" />
-			</td>
+			<td rowspan="3"><input id="recordButton" type="button" value="Record" /></td>
 		</tr>
 		<tr>
 			<td><label id="empEmail"></label></td>
 		</tr>
 		<tr>
-			<td><input type="checkbox" id="optOut" /> Opt out of pronunciation service</td>
+			<td><input type="checkbox" id="optOut" /></td>
 			<td>
 			<audio controls>
 			  <source id="audioDId" src="" type="audio/ogg">
@@ -203,42 +183,27 @@ var globalFileName;
 </table>
 
 <div id="recordSection" style="display:none;">
-<p>Customize your name pronunciation service <input type="checkbox" id="standardRecording" checked="checked"/> Enable Standard Recording</p>
+<p>Customize your name pronunciation service , <input type="checkbox" id="standardRecording" /> Enable Standard Recording</p>
 
 <table border="1" cellpadding="1" cellspacing="1" class="center">
 	<tbody>
 		<tr>
 			<td>
-			<div id="languageDiv">
 			<label for="languages">Languages:-</label>
 
 			<select name="language" id="language">
 			  <option value="english">English</option>
 			  <option value="spanish">Spanish</option>
 			</select>
-			</div>
 			</td>
-			<td rowspan="2">
-			<p>
-			Press the Speak button on the left, and start speaking. The Speech Service will return recognition results as you 
-			speak. If you speak different languages, try any of the languages from drop down on the left. After you are done 
-			please hit the mike button again. You can download the recording to listen and if it is good then you can hit the 
-			upload button. 
-			</p>
-			</td>			
 		</tr>
 
 		<tr>
-			<td>
-			<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
-			<div id="recordDiv" style="display:none;">Recording...</div>
-			<input id="recordBTN" type="button" value="Click Mike to Start/Stop" />
+			<td><img id="record" src="img/mic128.png" onclick="toggleRecording(this);"></td>
 		</tr>
 		
 		<tr>
-			<td>
-			<input id="uploadBTN" type="button" value="Upload to Server" />
-			</td>
+			<td><input id="uploadBTN" type="button" value="Upload to Server" /></td>
 			<td colspan="1" rowspan="2">
 			<div id="viz" style="float:left;">
 				<div><canvas id="analyser" width="800" height="80"></canvas></div>
