@@ -52,6 +52,23 @@ var globalFileName;
   	    	$("#empEmail").html(data.profile.email);
   	    });
   	    
+  	    
+  	  $.ajax({
+          type: "GET",
+          url:"http://localhost:8080/api/language",
+          dataType: "json",
+          success: function (data) {
+        	  //alert(data);
+        	  $.each(data, function(index, value) {
+        		  //console.log(index);
+        		  //console.log(value);
+        		  var div_data="<option value="+value+">"+value+"</option>";
+                  $(div_data).appendTo('#language'); 
+        		}); 
+               
+            }
+        });
+
 
   		
 //it will be used to save recorded file
@@ -214,8 +231,7 @@ var globalFileName;
 			<label for="languages">Languages:-</label>
 
 			<select name="language" id="language">
-			  <option value="english">English</option>
-			  <option value="spanish">Spanish</option>
+
 			</select>
 			</div>
 			</td>
@@ -230,10 +246,10 @@ var globalFileName;
 		</tr>
 
 		<tr>
-			<td>
-			<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
-			<div id="recordDiv" style="display:none;">Recording...</div>
-			<input id="recordBTN" type="button" value="Click Mike to Start/Stop" />
+			<td width="20%">
+			<div id="recordDiv" style="display:none;position: absolute;color: blue;font-size: larger;">Recording...</div>
+			<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">			
+			<div id="recordBTN" style="font-size: small; color: #202020;font-weight: 800;">Click Mike to Start/Stop</div>
 		</tr>
 		
 		<tr>
