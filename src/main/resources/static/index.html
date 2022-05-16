@@ -3,7 +3,12 @@
 <head>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Audio Recorder</title>
+<script>  
+//global variables
+var globalBlob;  
+var globalFileName;
 
+</script>
 	<script src="js/audiodisplay.js"></script>
 	<script src="js/recorderjs/recorder.js"></script>
 	<script src="js/main.js"></script>
@@ -31,28 +36,44 @@
   		
 //it will be used to save recorded file
 
-  	  $(function(){
-  	    $('#uploadBTN').on('click', function(){ 
-  	        var formData = new FormData();
-  	      //let formData = new FormData(); 
-  	      formData.append("document", $("#document"));
-  	      formData.append("employeeId", $("#empId").attr('value'));
-  	    formData.append("name", "audio");
-  	      //alert($("#fileinfo"));
-  	      console.log($("#document"));
-  	        $.ajax({
-  	            url: 'api/pronunce/'+$("#empId").attr('value'),  
-  	            type: 'PUT',
-  	            data: formData,
-  	            success:function(data){
-  	                $('#output').html(data);
-  	            },
-  	            cache: false,
+  	//it will be used to save recorded file
+
+    	  $(function(){
+    	    $('#uploadBTN').on('click', function(){ 
+    	      // Get form
+    	      //var form = $('#fileUploadForm')[0];
+    	      //var data = new FormData(form);
+    	      var data = new FormData();
+    	      data.append("file", globalBlob);
+    	      data.append("employeeId", $("#empId").attr('value'));
+    	      
+    	      $.ajax({
+    	          type: "PUT",
+    	          enctype: 'multipart/form-data',
+    	          url: 'api/pronunce/'+$("#empId").attr('value'),
+    	          data: data,
+    	          processData: false, //prevent jQuery from automatically transforming the data into a query string
+    	          contentType: false,
+    	          cache: false,
+    	          timeout: 600000,
+    	          success: function (data) {  	        	  
+    	        		$('#output').html(data);
+    	        		globalBlob = null;
+    	        		globalFileName = null;
+    	          },
+    	          error: function (e) {
+    	              $("#output").text(e.responseText);
+    	              console.log("ERROR : ", e);
+
+    	          },
+    	        	cache: false,
   	            contentType: false,
   	            processData: false
-  	        });
-  	    });
-  	});
+    	      });
+    	    });
+    	    
+    	    
+    	});
 
   		
    });
@@ -64,9 +85,9 @@
 		background: lightgrey;
 		/*display: flex;*/
 		flex-direction: column;
-		height: 100vh;
 		width: 100%;
 		margin: 0 0;
+		overflow: auto;
 	}
 	canvas { 
 		display: inline-block; 
@@ -95,7 +116,7 @@
 	#save { opacity: 0.25;}
 	#save[download] { opacity: 1;}
 	#viz {
-		height: 80%;
+		height: 70%;
 		width: 60%;
 		display: flex;
 		flex-direction: column;
@@ -125,44 +146,83 @@
     padding: 7px;
 
 }
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+
 	</style>
 </head>
 <body>
 <input type="hidden" id="empId" value="111" />
 <div class="mainDiv">Name Pronunciation Page</div>
-<div class="secondDiv">
-<div style="float:left"><img src="img/profile-avatar.png"></div>
-<div style="pading: 2px 2px 2px 2px;">
-<label>Name:</label><label id="empName"></label><br/>
-<label>Email:</label><label id="empEmail"></label>
-</div>
-<div style="margin-top:10px;">
-<audio controls>
-  <source id="audioDId" src="" type="audio/ogg">
-</audio>
-</div>
-<div>
-<input id="recordButton" type="button" value="Record" />
-</div>
 
+<div class="secondDiv">
+<table border="1" cellpadding="1" cellspacing="1"  class="center">
+	<tbody>
+		<tr>
+			<td colspan="1" rowspan="2"><img src="img/profile-avatar.png" style="height: 73px"></td>
+			<td><label id="empName"></label></td>
+			<td rowspan="3"><input id="recordButton" type="button" value="Record" /></td>
+		</tr>
+		<tr>
+			<td><label id="empEmail"></label></td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" id="optOut" /></td>
+			<td>
+			<audio controls>
+			  <source id="audioDId" src="" type="audio/ogg">
+			</audio>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
 <div id="recordSection" style="display:none;">
-<div id="viz" style="float:left;">
-	<div><canvas id="analyser" width="600" height="80"></canvas></div>
-	<div><canvas id="wavedisplay" width="600" height="80"></canvas></div>
+<p>Customize your name pronunciation service , <input type="checkbox" id="standardRecording" /> Enable Standard Recording</p>
+
+<table border="1" cellpadding="1" cellspacing="1" class="center">
+	<tbody>
+		<tr>
+			<td>
+			<label for="languages">Languages:-</label>
+
+			<select name="language" id="language">
+			  <option value="english">English</option>
+			  <option value="spanish">Spanish</option>
+			</select>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><img id="record" src="img/mic128.png" onclick="toggleRecording(this);"></td>
+		</tr>
+		
+		<tr>
+			<td><input id="uploadBTN" type="button" value="Upload to Server" /></td>
+			<td colspan="1" rowspan="2">
+			<div id="viz" style="float:left;">
+				<div><canvas id="analyser" width="600" height="80"></canvas></div>
+				<div><canvas id="wavedisplay" width="600" height="80"></canvas></div>
+			</div>
+			
+			</td>
+		</tr>
+		<tr>
+			<td><a id="save" href="#"><img src="img/save.svg"></a></td>
+		</tr>
+	</tbody>
+</table>
 </div>
-<div id="controls" >
-<div><img id="record" src="img/mic128.png" onclick="toggleRecording(this);"></div>
-<div><a id="save" href="#"><img src="img/save.svg"></a></div>
-</div>
-</div>
-<form  enctype="multipart/form-data">
-<input id="document" name="document" type="file" accept="audio/*" />
-<input id="uploadBTN" type="button" value="Upload to Server" />
-</form>
 <div id="output"></div>
 
 </div>
+
 
 </body>
 <script>
