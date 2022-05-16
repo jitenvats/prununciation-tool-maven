@@ -28,7 +28,7 @@ var globalFileName;
   	    $.ajax({
   	        url: "http://localhost:8080/api/users/me"
   	    }).then(function(data) {
-  	    	$("#audioDId").attr('src', "api/pronunce/"+data.id);//assuming id is employeeId
+  	    	$("#audioDId").attr('src', "http://localhost:8080/api/pronunce/"+data.id);//assuming id is employeeId
   	    	$("#empId").attr('value', data.id);
   	    	$("#empName").html(data.profile.firstName+" "+data.profile.lastName);
   	    	$("#empEmail").html(data.profile.email);
