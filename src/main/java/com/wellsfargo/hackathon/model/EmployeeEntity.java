@@ -22,5 +22,7 @@ public class EmployeeEntity {
 	private String phonetic;
 	
 	private String language;
+	
+	private String optOut;
 
 }

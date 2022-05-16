@@ -30,4 +30,6 @@ public class Employee {
 	@Positive
 	@Max(4)
 	private long speed;
+	
+	private String optOut;
 }

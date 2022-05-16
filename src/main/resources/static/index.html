@@ -32,8 +32,14 @@ var globalFileName;
   	    });
   		$("#optOut").click(function() {
   			//alert("click");
-  	        $("#recordSection").hide();
-  	        $("#recordButton").toggle();
+  			var ischecked = $("#optOut").is(":checked");
+   	        if (ischecked) {
+   	        	$("#recordSection").hide();
+   	  	        $("#recordButton").hide();
+   	        }else{
+   	        	$("#recordSection").show();
+   	  	        $("#recordButton").show();
+   	        }  	        
   	      
   	    });
   		
@@ -50,33 +56,55 @@ var globalFileName;
   	    	$("#empId").attr('value', data.id);
   	    	$("#empName").html(data.profile.firstName+" "+data.profile.lastName);
   	    	$("#empEmail").html(data.profile.email);
+  	    	
+  	    	//call another api in order for language
+  	    	  $.ajax({
+	          type: "GET",
+	          url:"http://localhost:8080/api/language",
+	          dataType: "json",
+	          success: function (data) {
+	        	  //alert(data);
+	        	  $.each(data, function(index, value) {
+	        		  //console.log(index);
+	        		  //console.log(value);
+	        		  if(value == 'en-US'){
+	        			  var div_data="<option value="+value+" selected='selected'>"+value+"</option>";
+	        		  }else{
+	        			  var div_data="<option value="+value+">"+value+"</option>";
+	        		  }
+	        		  
+	                  $(div_data).appendTo('#language'); 
+	        		}); 
+	               
+	            }
+	        }); 
+  	    	
+  	    	//call another api for language and optOut
+  		    $.ajax({
+  	  	        url: "http://localhost:8080/api/employee/"+$("#empId").attr('value')
+  	  	    }).then(function(data) {
+  	  	    	//alert(data);
+  	  	    	$("#language").val(data.language).change();
+  	  	    	if(data.optOut == "Yes"){
+  	  	    		$("#optOut").attr("checked","true");
+  	  	    		$("#recordSection").hide();
+	   	  	        $("#recordButton").hide();
+  	  	    	}
+  	  	    	
+  	  	    });
+  	    	
   	    });
   	    
-  	    
-  	  $.ajax({
-          type: "GET",
-          url:"http://localhost:8080/api/language",
-          dataType: "json",
-          success: function (data) {
-        	  //alert(data);
-        	  $.each(data, function(index, value) {
-        		  //console.log(index);
-        		  //console.log(value);
-        		  if(value == 'en-US'){
-        			  var div_data="<option value="+value+" selected='selected'>"+value+"</option>";
-        		  }else{
-        			  var div_data="<option value="+value+">"+value+"</option>";
-        		  }
-        		  
-                  $(div_data).appendTo('#language'); 
-        		}); 
-               
-            }
-        });
+/* 	    $('#language').on('change', function(){ 
 
+	    	var source = $("#audioDId");
+	  	    	$("#audioDId").attr('src', "/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val()).appendTo(source.parent()); //assuming id is employeeId
+  	  	    var url = "http://localhost:8080/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val();
+	  	  	  var audio = new Audio(url);
+	  	  	  audio.load();
+  	      
+  	    }); */
 
-  		
-//it will be used to save recorded file
 
   	//it will be used to save recorded file
 
@@ -114,48 +142,23 @@ var globalFileName;
     	      });
     	    });
     	    
-    	    $('#language').on('change', function(){ 
-
-    	    	var source = $("#audioDId");
-  	  	    	$("#audioDId").attr('src', "/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val()).appendTo(source.parent()); //assuming id is employeeId
-	  	  	    var url = "http://localhost:8080/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val();
-		  	  	  var audio = new Audio(url);
-		  	  	  audio.load();
-		  	  	  //audio.play();  
-  	  	    	
-/*       	      $.ajax({
-      	          type: "GET",
-      	          url: 'http://localhost:8080/api/pronunce/'+$("#empId").attr('value')+"?language="+$("#language").val(),
-      	          contentType: false,
-      	          cache: false,
-      	          timeout: 600000,
-      	          success: function (data) {  	        	  
-      	        	var source = $("#audioDId");
-      	  	    	$("#audioDId").attr('src', "/api/pronunce/"+data.id).appendTo(source.parent()); //assuming id is employeeId
-      	          },
-      	          error: function (e) {
-      	              $("#output").text(e.responseText);
-      	              console.log("ERROR : ", e);
-
-      	          },
-      	        	cache: false,
-    	            contentType: false,
-    	            processData: false
-      	      }); */
-      	      
-      	    });
     	    
     	    $('#saveBtn').on('click', function(){       	           	      
-      	      
+    	    	var ischecked = $("#optOut").is(":checked");
+    	    	var optOutV = "No";
+    	        if (ischecked) {
+    	        	optOutV = "Yes";
+    	        }
       	      $.ajax({
       	          type: "POST",
       	          url: 'http://localhost:8080/api/translate/',
-      	          data: JSON.stringify( { employeeId: $("#empId").attr('value'), employeeName: $("#empName").html(), language: $("#language").val() }),
+      	          data: JSON.stringify( { employeeId: $("#empId").attr('value'), employeeName: $("#empName").html(), language: $("#language").val(), optOut: optOutV }),
       	          dataType: 'json',
       	          contentType: "application/json; charset=utf-8",
       	          timeout: 600000,
       	          success: function (data) {  	        	  
-					alert(data);
+					//alert(data);
+      	        	window.location.reload();
       	          },
       	          error: function (e) {
       	              console.log("ERROR : ", e);
@@ -249,7 +252,7 @@ var globalFileName;
 <body>
 <input type="hidden" id="empId" value="111" />
 <div class="mainDiv">Name Pronunciation Page <input type="text" id="searchEmp" /></div>
-<div align="right"><a href="/logout">Logout</a></div>
+<div align="right" style="margin-right: 10px;"><a href="/logout">Logout</a></div>
 <div class="secondDiv">
 <table border="1" cellpadding="1" cellspacing="1"  class="center">
 	<tbody>

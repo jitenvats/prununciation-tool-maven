@@ -220,5 +220,15 @@ public class PronunciationAPIController {
 		return ResponseEntity.ok().body("After Authentication :" + token.getPrincipal().getAttributes().get("name"));
 
 	}
+	
+	@GetMapping(value = "/employee/{employeeId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@ApiOperation(value = "Get Employee Details Based on Employee ID", response = StreamingResponseBody.class)
+	public ResponseEntity<EmployeeEntity> getEmpDetails(@PathVariable("employeeId") String employeeId) throws Exception {
+		
+			EmployeeEntity employee = employeeService.getEmployeeDetailsWilNull(employeeId);
+			employee.setPronunciation(null);
+			LOGGER.info("Employee : {}", employee);
+			return new ResponseEntity<EmployeeEntity>(employee, HttpStatus.ACCEPTED);
+	}
 
 }
