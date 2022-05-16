@@ -62,7 +62,12 @@ var globalFileName;
         	  $.each(data, function(index, value) {
         		  //console.log(index);
         		  //console.log(value);
-        		  var div_data="<option value="+value+">"+value+"</option>";
+        		  if(value == 'en-US'){
+        			  var div_data="<option value="+value+" selected='selected'>"+value+"</option>";
+        		  }else{
+        			  var div_data="<option value="+value+">"+value+"</option>";
+        		  }
+        		  
                   $(div_data).appendTo('#language'); 
         		}); 
                
@@ -140,37 +145,27 @@ var globalFileName;
       	      
       	    });
     	    
-    	    $('#saveBtn').on('click', function(){ 
-      	      
-    	      /* var data = new FormData();
-    	      data.append("employeeId", $("#empId").attr('value'));
-    	      data.append("employeeName", $("#empName").html());
-      	      data.append("language", $("#language").val()); */
-      	      
+    	    $('#saveBtn').on('click', function(){       	           	      
       	      
       	      $.ajax({
       	          type: "POST",
       	          url: 'http://localhost:8080/api/translate/',
-      	          data: JSON.stringify( { "employeeId": $("#empId").attr('value'), "employeeName": $("#empName").html(),"language": $("#language").val() }),
+      	          data: JSON.stringify( { employeeId: $("#empId").attr('value'), employeeName: $("#empName").html(), language: $("#language").val() }),
       	          dataType: 'json',
-      	          contentType: 'application/json',
+      	          contentType: "application/json; charset=utf-8",
       	          timeout: 600000,
       	          success: function (data) {  	        	  
-
+					alert(data);
       	          },
       	          error: function (e) {
       	              console.log("ERROR : ", e);
 
       	          },
-      	        	cache: false,
-    	            contentType: false,
-    	            processData: false
+
       	      });
-      	    });
-    	    
+      	    });    	    
     	    
     	});
-
   		
    });
 </script>

@@ -75,6 +75,9 @@ public class PronunciationAPIController {
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
+		if(employee.getPronunciationType() == null){
+			employee.setPronunciationType(PronunciationType.DEFAULT);
+		}
 
 		EmployeeResponse savedEmployee = employeeService.saveEmployee(entity, employee.getPronunciationType(),
 				employee.getLanguage(), true, employee.getSpeed());
