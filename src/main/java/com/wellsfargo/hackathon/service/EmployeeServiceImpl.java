@@ -41,11 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (translate) {
 			
 			ByteString response = translationService.translateEmployeeName(employee.getEmployeeName(), pronunciationType, language, speed);
-			try {
-				SpeechToTextService.toText(response,language);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			
 			Binary pronaunciation = new Binary(BsonBinarySubType.BINARY, response.toByteArray());
 			String translation = SpeechToTextService.toText(response,language);
 			LOGGER.info("Name Translation : {}", translation);
