@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,7 +84,7 @@ public class PronunciationAPIController {
 	@GetMapping(value = "/pronunce/{employeeId}", produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ApiOperation(value = "Get Translated Employee Name Based on Employee ID", response = StreamingResponseBody.class)
 	public ResponseEntity<StreamingResponseBody> getPronunciation(@PathVariable("employeeId") String employeeId,
-			Authentication auth) throws Exception {
+			Authentication auth, @RequestParam(name = "language", defaultValue = "en-US") String language) throws Exception {
 		EmployeeEntity employee = employeeService.getEmployeeDetailsWilNull(employeeId);
 		LOGGER.info("Employee : {}", employee);
 		StreamingResponseBody responseBody = null;
@@ -95,7 +96,7 @@ public class PronunciationAPIController {
 			responseBody = response -> {
 				try {
 					response.write(translationService
-							.translateEmployeeName(employeeName, PronunciationType.MALE, null, 1).toByteArray());
+							.translateEmployeeName(employeeName, PronunciationType.MALE, language, 1).toByteArray());
 				} catch (ExternalSystemException e) {
 					e.printStackTrace();
 				}

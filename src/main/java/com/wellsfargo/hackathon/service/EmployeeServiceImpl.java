@@ -51,6 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			LOGGER.info("Name Translation : {}", translation);
 			employee.setPronunciation(pronaunciation);
 			employee.setPhonetic(translation);
+			employee.setLanguage(language);
 		}
 
 		EmployeeEntity savedEmployee = employeeRepository.save(employee);
