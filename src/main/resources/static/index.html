@@ -50,7 +50,7 @@ var globalFileName;
     	      $.ajax({
     	          type: "PUT",
     	          enctype: 'multipart/form-data',
-    	          url: 'api/pronunce/'+$("#empId").attr('value'),
+    	          url: 'http://localhost:8080/api/pronunce/'+$("#empId").attr('value'),
     	          data: data,
     	          processData: false, //prevent jQuery from automatically transforming the data into a query string
     	          contentType: false,

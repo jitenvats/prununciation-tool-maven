@@ -19,9 +19,8 @@ public class OktaOAuth2Config extends WebSecurityConfigurerAdapter {
                 
                 // enable OAuth2/OIDC
                 .and().oauth2Client()
-                .and().oauth2Login();
-                //.oauth2ResourceServer().jwt(); // replace .jwt() with .opaqueToken() for Opaque Token case
-
+                .and().oauth2Login();                //.oauth2ResourceServer().jwt(); // replace .jwt() with .opaqueToken() for Opaque Token case
+        http.csrf().disable();
         // Send a 401 message to the browser (w/o this, you'll see a blank page)
         //Okta.configureResourceServer401ResponseBody(http);
     }
