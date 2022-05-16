@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.wellsfargo.hackathon.controller;
 
 import java.lang.reflect.InvocationTargetException;
