@@ -14,6 +14,8 @@ import lombok.Data;
 @Valid
 public class Employee {
 	
+	private String employeeId;
+	
 	@NotEmpty(message = "Name Cannot be empty")
 	@NotNull(message = "Name Cannot be null")
 	private String employeeName;	

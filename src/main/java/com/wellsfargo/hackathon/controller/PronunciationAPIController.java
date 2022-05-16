@@ -111,6 +111,27 @@ public class PronunciationAPIController {
 			return ResponseEntity.ok().body(responseBody);
 		}
 	}
+	
+	@GetMapping(value = "/pronunceOnFly/{employeeId}", produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
+	@ApiOperation(value = "Get Translated Employee Name Based on Employee ID", response = StreamingResponseBody.class)
+	public ResponseEntity<StreamingResponseBody> getPronunciationOnFly(@PathVariable("employeeId") String employeeId,
+			Authentication auth, @RequestParam(name = "language", defaultValue = "en-US") String language) throws Exception {
+		
+		StreamingResponseBody responseBody = null;
+		LOGGER.info("Employee Details not found in DB");
+		OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
+		String employeeName = (String) token.getPrincipal().getAttributes().get("name");
+		LOGGER.info("Employee Name from  Authentication : {}", employeeName);
+		responseBody = response -> {
+			try {
+				response.write(translationService
+						.translateEmployeeName(employeeName, PronunciationType.MALE, language, 1).toByteArray());
+			} catch (ExternalSystemException e) {
+				e.printStackTrace();
+			}
+		};
+		return ResponseEntity.ok().body(responseBody);
+	}
 
 	@GetMapping(value = "/pronunce/{firstName}/{lastName}", produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ApiOperation(value = "Get Translated Employee Name Based on firstName and lastName ", response = StreamingResponseBody.class)

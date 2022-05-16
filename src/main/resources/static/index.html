@@ -109,6 +109,65 @@ var globalFileName;
     	      });
     	    });
     	    
+    	    $('#language').on('change', function(){ 
+
+    	    	var source = $("#audioDId");
+  	  	    	$("#audioDId").attr('src', "/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val()).appendTo(source.parent()); //assuming id is employeeId
+	  	  	    var url = "http://localhost:8080/api/pronunceOnFly/"+$("#empId").attr('value')+"?language="+$("#language").val();
+		  	  	  var audio = new Audio(url);
+		  	  	  audio.load();
+		  	  	  //audio.play();  
+  	  	    	
+/*       	      $.ajax({
+      	          type: "GET",
+      	          url: 'http://localhost:8080/api/pronunce/'+$("#empId").attr('value')+"?language="+$("#language").val(),
+      	          contentType: false,
+      	          cache: false,
+      	          timeout: 600000,
+      	          success: function (data) {  	        	  
+      	        	var source = $("#audioDId");
+      	  	    	$("#audioDId").attr('src', "/api/pronunce/"+data.id).appendTo(source.parent()); //assuming id is employeeId
+      	          },
+      	          error: function (e) {
+      	              $("#output").text(e.responseText);
+      	              console.log("ERROR : ", e);
+
+      	          },
+      	        	cache: false,
+    	            contentType: false,
+    	            processData: false
+      	      }); */
+      	      
+      	    });
+    	    
+    	    $('#saveBtn').on('click', function(){ 
+      	      
+    	      /* var data = new FormData();
+    	      data.append("employeeId", $("#empId").attr('value'));
+    	      data.append("employeeName", $("#empName").html());
+      	      data.append("language", $("#language").val()); */
+      	      
+      	      
+      	      $.ajax({
+      	          type: "POST",
+      	          url: 'http://localhost:8080/api/translate/',
+      	          data: JSON.stringify( { "employeeId": $("#empId").attr('value'), "employeeName": $("#empName").html(),"language": $("#language").val() }),
+      	          dataType: 'json',
+      	          contentType: 'application/json',
+      	          timeout: 600000,
+      	          success: function (data) {  	        	  
+
+      	          },
+      	          error: function (e) {
+      	              console.log("ERROR : ", e);
+
+      	          },
+      	        	cache: false,
+    	            contentType: false,
+    	            processData: false
+      	      });
+      	    });
+    	    
     	    
     	});
 
