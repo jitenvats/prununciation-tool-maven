@@ -135,7 +135,7 @@ public class PronunciationAPIController {
 	@PutMapping(value = "/pronunce/{employeeId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ApiOperation(value = "Update Custom Employee Name Pronunciation Based on Employee ID", response = EmployeeResponse.class)
 	public ResponseEntity<EmployeeResponse> updatePronunciation(@PathVariable("employeeId") String employeeId,
-			@RequestPart MultipartFile document) throws Exception {
+			@RequestPart(name = "file") MultipartFile document) throws Exception {
 
 		LOGGER.info("File Type : {}", document.getContentType());
 
@@ -143,9 +143,18 @@ public class PronunciationAPIController {
 			throw new ContentTypeException("Not a Valid Audio File", "E-0002");
 		}
 
-		EmployeeEntity employee = employeeService.getEmployeeDetails(employeeId);
-		LOGGER.info("Employee : {}", employee);
-
+		EmployeeEntity employee = null ;
+		
+		try {
+			employee = 	employeeService.getEmployeeDetails(employeeId);
+			LOGGER.info("Employee : {}", employee);
+		}catch (BadRequestException e) {
+			employee = new EmployeeEntity();
+		}
+				
+			
+		
+		employee.setEmployeeId(employeeId);
 		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, document.getBytes()));
 		EmployeeResponse updatedEmployee = employeeService.saveEmployee(employee, null, null, false, 1);
 		
