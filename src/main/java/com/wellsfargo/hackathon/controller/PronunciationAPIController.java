@@ -139,7 +139,7 @@ public class PronunciationAPIController {
 
 		LOGGER.info("File Type : {}", file.getContentType());
 
-		if (!document.getContentType().startsWith(AUDIO_CONTENT_TYPE)) {
+		if (!file.getContentType().startsWith(AUDIO_CONTENT_TYPE)) {
 			throw new ContentTypeException("Not a Valid Audio File", "E-0002");
 		}
 
@@ -155,7 +155,7 @@ public class PronunciationAPIController {
 			
 		
 		employee.setEmployeeId(employeeId);
-		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, document.getBytes()));
+		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
 		EmployeeResponse updatedEmployee = employeeService.saveEmployee(employee, null, null, false, 1);
 		
 		//EmployeeResponse updatedEmployee = new EmployeeResponse();
