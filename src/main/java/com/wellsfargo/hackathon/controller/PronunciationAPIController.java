@@ -202,20 +202,5 @@ public class PronunciationAPIController {
 
 	}
 
-	@GetMapping(value = "/hello", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> getHello() throws Exception {
-		return ResponseEntity.ok().body("Hello World");
-
-	}
-
-	@GetMapping(value = "/hello2", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> getHello2(Authentication auth) throws Exception {
-
-		OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
-
-		System.out.println("principle:" + auth.toString());
-		return ResponseEntity.ok().body("After Authentication :" + token.getPrincipal().getAttributes().get("name"));
-
-	}
 
 }
