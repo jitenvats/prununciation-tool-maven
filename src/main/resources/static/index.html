@@ -212,34 +212,42 @@ var globalFileName;
 		<tr>
 			<td><input type="checkbox" id="optOut" /> Opt out of pronunciation service</td>
 			<td>
+			<table>
+			<td><div id="languageDiv">
+			<label for="languages">Languages:-</label>
+
+			<select name="language" id="language">
+
+			</select>
+			</div></td>
+			<td width="60%">
 			<audio controls>
 			  <source id="audioDId" src="" type="audio/ogg">
 			</audio>
+			</td>
+			<td>
+			<input type="button" id="saveBtn" name="saveBtn" value="save" />
+			</td>
+			</table>	
+			
+			
 			</td>
 		</tr>
 	</tbody>
 </table>
 
 <div id="recordSection" style="display:none;">
-<p>Customize your name pronunciation service <input type="checkbox" id="standardRecording" checked="checked"/> Enable Standard Recording</p>
+<p>Customize your name pronunciation service 
 
 <table border="1" cellpadding="1" cellspacing="1" class="center">
 	<tbody>
 		<tr>
-			<td>
-			<div id="languageDiv">
-			<label for="languages">Languages:-</label>
-
-			<select name="language" id="language">
-
-			</select>
-			</div>
-			</td>
+			<td></td>
 			<td rowspan="2">
 			<p>
 			Press the Speak button on the left, and start speaking. The Speech Service will return recognition results as you 
 			speak. If you speak different languages, try any of the languages from drop down on the left. After you are done 
-			please hit the mike button again. You can download the recording to listen and if it is good then you can hit the 
+			please click the mike button again. You can download the recording to listen and if it is good then you can click the 
 			upload button. 
 			</p>
 			</td>			
