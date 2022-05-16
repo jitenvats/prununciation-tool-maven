@@ -64,7 +64,7 @@ var globalFileName;
     	      //var form = $('#fileUploadForm')[0];
     	      //var data = new FormData(form);
     	      var data = new FormData();
-    	      data.append("file", globalBlob);
+    	      data.append("file", globalBlob, globalFileName);
     	      data.append("employeeId", $("#empId").attr('value'));
     	      
     	      $.ajax({
