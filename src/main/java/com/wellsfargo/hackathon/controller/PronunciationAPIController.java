@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,7 +84,8 @@ public class PronunciationAPIController {
 	@GetMapping(value = "/pronunce/{employeeId}", produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ApiOperation(value = "Get Translated Employee Name Based on Employee ID", response = StreamingResponseBody.class)
 	public ResponseEntity<StreamingResponseBody> getPronunciation(@PathVariable("employeeId") String employeeId,
-			Authentication auth) throws Exception {
+			Authentication auth, @RequestParam(name = "language", defaultValue = "en-US") String language) throws Exception {
+		
 		EmployeeEntity employee = employeeService.getEmployeeDetailsWilNull(employeeId);
 		LOGGER.info("Employee : {}", employee);
 		StreamingResponseBody responseBody = null;
@@ -95,7 +97,7 @@ public class PronunciationAPIController {
 			responseBody = response -> {
 				try {
 					response.write(translationService
-							.translateEmployeeName(employeeName, PronunciationType.MALE, null, 1).toByteArray());
+							.translateEmployeeName(employeeName, PronunciationType.MALE, language, 1).toByteArray());
 				} catch (ExternalSystemException e) {
 					e.printStackTrace();
 				}
@@ -135,11 +137,11 @@ public class PronunciationAPIController {
 	@PutMapping(value = "/pronunce/{employeeId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ApiOperation(value = "Update Custom Employee Name Pronunciation Based on Employee ID", response = EmployeeResponse.class)
 	public ResponseEntity<EmployeeResponse> updatePronunciation(@PathVariable("employeeId") String employeeId,
-			@RequestPart MultipartFile file) throws Exception {
+			@RequestPart(name = "file") MultipartFile document) throws Exception {
 
-		LOGGER.info("File Type : {}", file.getContentType());
+		LOGGER.info("File Type : {}", document.getContentType());
 
-		if (!file.getContentType().startsWith(AUDIO_CONTENT_TYPE)) {
+		if (!document.getContentType().startsWith(AUDIO_CONTENT_TYPE)) {
 			throw new ContentTypeException("Not a Valid Audio File", "E-0002");
 		}
 
@@ -155,7 +157,7 @@ public class PronunciationAPIController {
 			
 		
 		employee.setEmployeeId(employeeId);
-		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, document.getBytes()));
 		EmployeeResponse updatedEmployee = employeeService.saveEmployee(employee, null, null, false, 1);
 		
 		//EmployeeResponse updatedEmployee = new EmployeeResponse();

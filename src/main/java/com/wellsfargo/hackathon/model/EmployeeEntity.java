@@ -20,5 +20,7 @@ public class EmployeeEntity {
 	private Binary pronunciation;
 	
 	private String phonetic;
+	
+	private String language;
 
 }
