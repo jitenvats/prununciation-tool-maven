@@ -143,13 +143,13 @@ public class PronunciationAPIController {
 			throw new ContentTypeException("Not a Valid Audio File", "E-0002");
 		}
 
-		/*EmployeeEntity employee = employeeService.getEmployeeDetails(employeeId);
+		EmployeeEntity employee = employeeService.getEmployeeDetails(employeeId);
 		LOGGER.info("Employee : {}", employee);
 
 		employee.setPronunciation(new Binary(BsonBinarySubType.BINARY, document.getBytes()));
-		EmployeeResponse updatedEmployee = employeeService.saveEmployee(employee, null, null, false, 1);*/
+		EmployeeResponse updatedEmployee = employeeService.saveEmployee(employee, null, null, false, 1);
 		
-		EmployeeResponse updatedEmployee = new EmployeeResponse();
+		//EmployeeResponse updatedEmployee = new EmployeeResponse();
 		return new ResponseEntity<EmployeeResponse>(updatedEmployee, HttpStatus.ACCEPTED);
 
 	}
