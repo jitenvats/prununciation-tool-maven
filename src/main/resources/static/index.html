@@ -121,6 +121,12 @@ var globalFileName;
     	          enctype: 'multipart/form-data',
     	          url: 'http://localhost:8080/api/pronunce/'+$("#empId").attr('value'),
     	          data: data,
+	      	      beforeSend: function() {
+	      	          $("#loaderDiv").show();
+	      	      },
+	      	      success: function(data) {
+	      	          $("#loaderDiv").hide();
+	      	      },
     	          processData: false, //prevent jQuery from automatically transforming the data into a query string
     	          contentType: false,
     	          cache: false,
@@ -129,6 +135,7 @@ var globalFileName;
     	        		$('#output').html(data);
     	        		globalBlob = null;
     	        		globalFileName = null;
+    	        		window.location.reload();
     	          },
     	          error: function (e) {
     	              $("#output").text(e.responseText);
